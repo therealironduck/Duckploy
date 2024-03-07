@@ -1,4 +1,5 @@
 name: NUnit Tests
+on: push
 
 jobs:
   test:
