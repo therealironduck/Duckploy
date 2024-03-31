@@ -85,4 +85,4 @@ jobs:
           push: true
           tags: jkniest/duckploy:dev-develop
           platforms: linux/amd64,linux/arm64
-
+          no-cache: true
