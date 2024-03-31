@@ -1,0 +1,88 @@
+name: Deploy
+on:
+  workflow_run:
+    workflows: ["Go"]
+    types:
+      - completed
+
+jobs:
+  deploy-latest:
+    if: github.event.workflow_run.conclusion == 'success' && startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Generate Docker tags
+        id: generate-tags
+        run: |
+          TAG=${GITHUB_REF/refs\/tags\//}
+          echo "TAGS=jkniest/duckploy:latest,jkniest/duckploy:${TAG},jkniest/duckploy:${TAG%.*},jkniest/duckploy:${TAG%%.*}" >> $GITHUB_ENV
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.TAGS }}
+          platforms: linux/amd64,linux/arm64
+
+  deploy-main:
+    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: jkniest/duckploy:dev-main
+          platforms: linux/amd64,linux/arm64
+
+  deploy-develop:
+    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: jkniest/duckploy:dev-develop
+          platforms: linux/amd64,linux/arm64
+
