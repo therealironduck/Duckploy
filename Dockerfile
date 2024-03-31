@@ -26,7 +26,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /duckploy && \
 FROM gcr.io/distroless/static-debian12 as release
 
 # Set destination for copy commands down below
-WORKDIR /
+WORKDIR /app
 
 # Copy build binary into release stage
 COPY --from=build /duckploy /duckploy

@@ -7,6 +7,8 @@ import (
 )
 
 func TestDeployCmd(t *testing.T) {
+	t.Parallel()
+
 	// Redirect output to buffer
 	old := os.Stdout
 	r, w, _ := os.Pipe()
@@ -21,7 +23,7 @@ func TestDeployCmd(t *testing.T) {
 	outC := make(chan string)
 	go func() {
 		var buf bytes.Buffer
-		buf.ReadFrom(r)
+		_, _ = buf.ReadFrom(r)
 		outC <- buf.String()
 	}()
 
