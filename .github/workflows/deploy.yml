@@ -62,7 +62,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
 
   deploy-develop:
-    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/feature/github-actions'
+    if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
