@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Duckploy/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: ${{ env.TAGS }}
           platforms: linux/amd64,linux/arm64
@@ -56,7 +56,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Duckploy/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: jkniest/duckploy:dev-main
           platforms: linux/amd64,linux/arm64
@@ -81,7 +81,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Duckploy/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: jkniest/duckploy:dev-develop
           platforms: linux/amd64,linux/arm64
