@@ -1,0 +1,75 @@
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - asasalint
+    - asciicheck
+    - bidichk
+    - bodyclose
+    - contextcheck
+    - copyloopvar
+    - cyclop
+    - decorder
+    - depguard
+    - dogsled
+    - dupl
+    - durationcheck
+    - errchkjson
+    - errname
+    - errorlint
+    - execinquery
+    - exhaustive
+    - exportloopref
+    - forcetypeassert
+    - gocheckcompilerdirectives
+    - gochecksumtype
+    - goconst
+    - gocritic
+    - godox
+    - goerr113
+    - gofmt
+    - gomnd
+    - gomoddirectives
+    - goprintffuncname
+    - gosec
+    - grouper
+    - inamedparam
+    - intrange
+    - mirror
+    - nestif
+    - nilerr
+    - nilnil
+    - noctx
+    - paralleltest
+    - perfsprint
+    - prealloc
+    - predeclared
+    - reassign
+    - revive
+    - tenv
+    - thelper
+    - tparallel
+    - unconvert
+    - unparam
+    - usestdlibvars
+    - wastedassign
+    - whitespace
+    - wrapcheck
+
+linters-settings:
+  depguard:
+    rules:
+      main:
+        allow:
+          - "Duckploy/cmd"
+          - "fmt"
+          - "github.com/spf13/cobra"
+          - "os"
+          - "path/filepath"
+          - "bytes"
+          - "testing"
