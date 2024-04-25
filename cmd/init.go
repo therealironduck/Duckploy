@@ -40,8 +40,3 @@ as a starter point for deployments!`,
 func init() {
 	rootCmd.AddCommand(initCmd)
 }
-
-func exitWithErrorf(format string, a ...interface{}) {
-	_, _ = fmt.Fprintf(os.Stderr, format+"\n", a...)
-	os.Exit(1)
-}

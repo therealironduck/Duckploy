@@ -1,41 +1,58 @@
 package cmd
 
 import (
-	"bytes"
-	"os"
+	"Duckploy/data"
+	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 )
 
-func TestDeployCmd(t *testing.T) {
+func TestThatItThrowsAnErrorIfPathWasNotFoundAndNonInteractive(t *testing.T) {
 	t.Parallel()
 
-	// Redirect output to buffer
-	old := os.Stdout
-	r, w, _ := os.Pipe()
-	os.Stdout = w
+	exitCode, resetFuncExitCode, _ := setupExitCodeTest(t)
+	defer resetFuncExitCode()
 
-	// Execute the command
-	rootCmd.SetArgs([]string{"deploy"})
-	if err := rootCmd.Execute(); err != nil {
-		t.Fatalf("Execute command with args failed: %v", err)
-	}
+	_, out, resetFuncOutput := pipeOutputTest(t, func() {
+		runCommandTest(t, "deploy", "-n")
+	})
+	defer resetFuncOutput()
 
-	outC := make(chan string)
-	go func() {
-		var buf bytes.Buffer
-		_, _ = buf.ReadFrom(r)
-		outC <- buf.String()
-	}()
+	assert.Equal(t, 1, *exitCode, "Exit code should be 1")
+	assert.Contains(t, out, "Duckploy configuration not found at: duckploy.json")
+}
 
-	err := w.Close()
-	if err != nil {
-		t.Fatalf("Cannot close buffer: %v", err)
-	}
-	os.Stdout = old
-	out := <-outC
+func TestThatThatItCanConnectViaSsh(t *testing.T) {
+	t.Parallel()
 
-	expected := "deploy called\n"
-	if out != expected {
-		t.Errorf("Expected \"%s\", got \"%s\"", expected, out)
-	}
+	exitCode, restoreFuncExitCode, resetFuncExitCode := setupExitCodeTest(t)
+	defer restoreFuncExitCode()
+
+	t.Run("via password", func(t *testing.T) {
+		t.Parallel()
+
+		defer resetFuncExitCode()
+
+		path, restoreFuncConfig, _ := mockConfigTest(t, data.Config{
+			Hosts: []data.Host{
+				{Hostname: "fake-host", SshUser: "fakey", SshPassword: "my-fake-pw", Path: "/home/fakey/example"},
+			},
+		})
+		defer restoreFuncConfig()
+
+		_, _, restoreFuncOutput := pipeOutputTest(t, func() {
+			runCommandTest(t, "deploy")
+		})
+		defer restoreFuncOutput()
+
+		assert.Condition(t, func() (success bool) {
+			return strings.HasSuffix(*path, "duckploy.json")
+		})
+		assert.Equal(t, 0, *exitCode)
+	})
+
+	// Basically: Load a ducktion.json file
+	// Read the hosts section
+	// Establish an ssh connection
+	// Run all commands sequential
 }

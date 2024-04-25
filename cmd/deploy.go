@@ -1,23 +1,32 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"path/filepath"
 )
 
 var deployCmd = &cobra.Command{
-	Use:   "deploy",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command.`,
+	Use:   "deploy [path]",
+	Short: "Deploy the application!",
+	Long:  `Load the Duckploy configuration and deploy it on the remote hosts.`,
+	Args:  cobra.MaximumNArgs(1),
 	Run: func(_ *cobra.Command, _ []string) {
-		fmt.Println("deploy called")
+		path, _ := filepath.Abs("example/duckploy.json")
+		readConfig(path)
+
+		// exitWithErrorf("Duckploy configuration not found at: duckploy.json")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(deployCmd)
+
+	deployCmd.Flags().BoolP(
+		"non-interactive",
+		"n",
+		false,
+		"Disables all interactive prompts",
+	)
 
 	// Here you will define your flags and configuration settings.
 

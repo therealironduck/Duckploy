@@ -35,6 +35,7 @@ jobs:
           push: true
           tags: ${{ env.TAGS }}
           platforms: linux/amd64,linux/arm64
+          no-cache: true
 
   deploy-main:
     if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main'
@@ -60,6 +61,7 @@ jobs:
           push: true
           tags: jkniest/duckploy:dev-main
           platforms: linux/amd64,linux/arm64
+          no-cache: true
 
   deploy-develop:
     if: github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/develop'

@@ -67,9 +67,12 @@ linters-settings:
       main:
         allow:
           - "Duckploy/cmd"
-          - "fmt"
+          - "Duckploy/data"
           - "github.com/spf13/cobra"
+          - "github.com/stretchr/testify/assert"
+          - "fmt"
           - "os"
           - "path/filepath"
           - "bytes"
           - "testing"
+          - "strings"

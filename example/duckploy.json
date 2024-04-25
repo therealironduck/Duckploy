@@ -1,0 +1,20 @@
+{
+  "steps": [
+    {
+      "action": "command",
+      "command": "echo 'Deployment Example' >> export.txt"
+    },
+    {
+      "action": "command",
+      "command": "$(pwd) >> pwd.txt"
+    }
+  ],
+  "hosts": [
+    {
+      "hostname": "127.0.0.1",
+      "ssh_user": "duckploy",
+      "ssh_password": "secret_password",
+      "path": "/home/duckploy/via-password"
+    }
+  ]
+}

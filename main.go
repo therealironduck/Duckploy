@@ -1,6 +1,8 @@
 package main
 
-import "Duckploy/cmd"
+import (
+	"Duckploy/cmd"
+)
 
 func main() {
 	cmd.Execute()

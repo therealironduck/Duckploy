@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  ubuntu:
+    image: 'duckploy/example'
+    ports:
+      - "2222:22"
+    build: .
