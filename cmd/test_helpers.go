@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"Duckploy/data"
+	"Duckploy/helper"
 	"bytes"
 	"os"
 	"testing"
@@ -11,12 +11,12 @@ func setupExitCodeTest(t *testing.T) (*int, func(), func()) {
 	t.Helper()
 
 	exitCode := 0
-	exitFunc = func(code int) {
+	helper.ExitFunc = func(code int) {
 		exitCode = code
 	}
 
 	restoreFunc := func() {
-		exitFunc = os.Exit
+		helper.ExitFunc = os.Exit
 	}
 
 	resetFunc := func() {
@@ -81,27 +81,4 @@ func pipeOutputTest(t *testing.T, run func()) (string, string, func()) {
 	outErr := <-errC
 
 	return out, outErr, resetFunc
-}
-
-func mockConfigTest(t *testing.T, config data.Config) (*string, func(), func()) {
-	t.Helper()
-
-	var givenPath string
-
-	old := readConfig
-	restoreFunc := func() {
-		readConfig = old
-	}
-
-	resetFunc := func() {
-		givenPath = ""
-	}
-
-	readConfig = func(path string) data.Config {
-		givenPath = path
-
-		return config
-	}
-
-	return &givenPath, restoreFunc, resetFunc
 }

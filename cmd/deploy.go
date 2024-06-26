@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"path/filepath"
 )
 
 var deployCmd = &cobra.Command{
@@ -11,10 +10,8 @@ var deployCmd = &cobra.Command{
 	Long:  `Load the Duckploy configuration and deploy it on the remote hosts.`,
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(_ *cobra.Command, _ []string) {
-		path, _ := filepath.Abs("example/duckploy.json")
-		readConfig(path)
-
-		// exitWithErrorf("Duckploy configuration not found at: duckploy.json")
+		// path, _ := filepath.Abs("example/duckploy.json")
+		// config.ReadConfig(path)
 	},
 }
 

@@ -12,8 +12,6 @@ var rootCmd = &cobra.Command{
 	Long:  `Simple SSH & task based deployment solution`,
 }
 
-var exitFunc = os.Exit
-
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {

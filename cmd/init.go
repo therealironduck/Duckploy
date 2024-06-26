@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"Duckploy/helper"
 	"fmt"
-	"github.com/spf13/cobra"
 	"os"
 	"path/filepath"
+
+	"github.com/spf13/cobra"
 )
 
 var initCmd = &cobra.Command{
@@ -21,16 +23,16 @@ as a starter point for deployments!`,
 
 		absPath, err := filepath.Abs(path)
 		if err != nil {
-			exitWithErrorf("Failed to get absolut path: %v", err)
+			helper.Exitf(os.Stderr, "Failed to get absolut path: %v", err)
 		}
 
 		fileInfo, err := os.Stat(absPath)
 		if err != nil {
-			exitWithErrorf("Failed to get file info: %v", err)
+			helper.Exitf(os.Stderr, "Failed to get file info: %v", err)
 		}
 
 		if !fileInfo.IsDir() {
-			exitWithErrorf("Path is not a directory: %s", absPath)
+			helper.Exitf(os.Stderr, "Path is not a directory: %s", absPath)
 		}
 
 		fmt.Println("Using path: " + absPath)
