@@ -17,16 +17,7 @@ func TestThatItCanReadTheConfigFromAFilePath(t *testing.T) {
 	err := helper.AppFs.MkdirAll("some/path/to", os.ModePerm)
 	require.NoError(t, err)
 
-	err = afero.WriteFile(helper.AppFs, "some/path/to/config.json", []byte(`{
-		"hosts": [
-			{
-				"hostname": "some-host",
-				"ssh_user": "ducky",
-				"ssh_password": "secret123",
-				"path": "/some/path"
-			}
-		]
-	}`), os.ModePerm)
+	err = afero.WriteFile(helper.AppFs, "some/path/to/config.json", []byte(helper.SimpleJsonConfig), os.ModePerm)
 	require.NoError(t, err)
 
 	result, err := ReadConfig("some/path/to/config.json")

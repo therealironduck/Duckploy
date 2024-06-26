@@ -1,6 +1,12 @@
 package cmd
 
 import (
+	"Duckploy/config"
+	"Duckploy/helper"
+	"fmt"
+	"os"
+
+	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
 )
 
@@ -9,9 +15,17 @@ var deployCmd = &cobra.Command{
 	Short: "Deploy the application!",
 	Long:  `Load the Duckploy configuration and deploy it on the remote hosts.`,
 	Args:  cobra.MaximumNArgs(1),
-	Run: func(_ *cobra.Command, _ []string) {
-		// path, _ := filepath.Abs("example/duckploy.json")
-		// config.ReadConfig(path)
+	Run: func(c *cobra.Command, args []string) {
+		exists, _ := afero.Exists(helper.AppFs, args[0])
+		fmt.Printf("%v", exists)
+		if exists == false {
+			helper.Exitf(os.Stderr, "Duckploy configuration not found at: %s", args[0])
+		}
+
+		config, _ := config.ReadConfig(args[0])
+		for _, host := range config.Hosts {
+			fmt.Printf("Connecting to %s@%s:22 via password\n", host.SSHUser, host.Hostname)
+		}
 	},
 }
 
