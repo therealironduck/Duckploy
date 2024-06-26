@@ -5,6 +5,11 @@ import (
 	"encoding/json"
 )
 
+type Step struct {
+	Action  string `json:"action"`
+	Command string `json:"command"`
+}
+
 type Host struct {
 	Hostname    string `json:"hostname"`
 	SSHUser     string `json:"ssh_user"`
@@ -13,6 +18,7 @@ type Host struct {
 }
 
 type Config struct {
+	Steps []Step `json:"steps"`
 	Hosts []Host `json:"hosts"`
 }
 

@@ -17,14 +17,20 @@ var deployCmd = &cobra.Command{
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(c *cobra.Command, args []string) {
 		exists, _ := afero.Exists(helper.AppFs, args[0])
-		fmt.Printf("%v", exists)
-		if exists == false {
+		if !exists {
 			helper.Exitf(os.Stderr, "Duckploy configuration not found at: %s", args[0])
 		}
 
 		config, _ := config.ReadConfig(args[0])
 		for _, host := range config.Hosts {
 			fmt.Printf("Connecting to %s@%s:22 via password\n", host.SSHUser, host.Hostname)
+			client, _ := helper.GetPasswordClient(host.SSHUser, host.SSHPassword, host.Hostname)
+
+			for _, step := range config.Steps {
+				fmt.Printf("-> Running `%s`\n", step.Command)
+				client.Run(fmt.Sprintf("cd %s && %s", host.Path, step.Command))
+				fmt.Printf("-> Done\n\n")
+			}
 		}
 	},
 }

@@ -28,6 +28,13 @@ func TestThatItCanReadTheConfigFromAFilePath(t *testing.T) {
 	require.Equal(t, "ducky", result.Hosts[0].SSHUser)
 	require.Equal(t, "secret123", result.Hosts[0].SSHPassword)
 	require.Equal(t, "/some/path", result.Hosts[0].Path)
+
+	require.Len(t, result.Steps, 2)
+	require.Equal(t, "command", result.Steps[0].Action)
+	require.Equal(t, "npm install", result.Steps[0].Command)
+
+	require.Equal(t, "command", result.Steps[1].Action)
+	require.Equal(t, "composer install", result.Steps[1].Command)
 }
 
 func TestErrorHandlingWhileReadingConfig(t *testing.T) {

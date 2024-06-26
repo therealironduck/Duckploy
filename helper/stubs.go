@@ -1,6 +1,16 @@
 package helper
 
 const SimpleJsonConfig = `{
+	"steps": [
+		{
+			"action": "command",
+			"command": "npm install"
+		},
+		{
+			"action": "command",
+			"command": "composer install"
+		}
+	],
 	"hosts": [
 		{
 			"hostname": "some-host",
